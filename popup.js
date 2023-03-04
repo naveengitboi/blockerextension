@@ -1,6 +1,7 @@
 let urlContent = document.getElementById("url");
 let blockBtn = document.getElementById("blockBtn");
 let errorMsg = document.getElementById("errorMsg");
+let unblock = document.getElementById('unblock')
 var websiteUrl;
 var websiteHostName;
 
@@ -10,29 +11,17 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
   urlContent = urlContent.innerText = websiteHostName;
 });
 
-function errorFunc(text){
-    errorMsg.textContent = text
-    setTimeout(() => {
-        errorMsg.textContent = ''
-    }, 3000);
+function errorFunc(text) {
+  errorMsg.textContent = text;
+  setTimeout(() => {
+    errorMsg.textContent = "";
+  }, 3000);
 }
-blockBtn.addEventListener("click", () => {
-  if (websiteUrl.toLowerCase().includes("chrome://")) {
-    errorFunc("You Cannot block this chrome site");
-  }
-  else{
-    chrome.storage.local.get("BlockedUrls", (data) => {
-        if(data.BlockedUrls === undefined){
-            chrome.storage.local.set({BlockedUrls: [{status:"In Progress", url: urlContent}]})
-        }
-        else{
-            if(data.BlockedUrls.some(e) => e.url === websiteHostName && e.status)
-        }
-    })
-  }
-  
-});
 
+
+unblock.addEventListener('click', ()=> {
+    chrome.storage.local.clear()
+})
 
 
 //   chrome.storage.local.set({BlockedUrls: [{ status: "In Progress", url: urlContent }]});
